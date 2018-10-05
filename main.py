@@ -33,3 +33,12 @@ def show_card(n,*args):
     print("\n",end = '')
 
 
+
+def hit():
+    
+    '''Genrates a new card randomly using randint fxn in python'''
+    
+    from random import randint
+    return randint(1,13),randint(1,8)
+
+
