@@ -42,6 +42,17 @@ def hit():
     '''Genrates a new card randomly using randint fxn in python'''
     
     from random import randint
-    return randint(1,13),randint(1,8)
+    
+    card = Card((randint(1,13),randint(1,8)))
+    
+    for cards in player_cards:
+        if card == cards:
+            hit()
+
+    for cards in computer_dealer_cards:
+        if card == cards:
+            hit()
+
+    return card
 
 
