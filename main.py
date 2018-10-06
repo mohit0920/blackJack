@@ -1,6 +1,6 @@
 def show_card(n,args):
     
-    '''Takes a class object as input & displays it in a user understandable manner/General card presentation'''
+    '''Takes number of cards & list of cards as input & displays it in a user understandable manner/General card presentation'''
     for i in range(0,n):
         print('+','-'*13,'+','   ',sep='',end = '')
     print("\n",end = '')
