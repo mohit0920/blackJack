@@ -60,3 +60,16 @@ def hit():
     return card
 
 
+def show_deck():
+
+    '''Takes No input shows Deck with number of cards left in deck'''
+
+    print('+','-'*14,'+','   ',sep='',end = '\n')
+    for _ in range(0,3):
+        print('|',' '*14,'|','   ',sep = '',end = '\n')
+
+    print('|',' '*5, "DECK", ' '*5 , '|','   ',sep= '',end = '\n')
+    print('|',' '*3, 52-len(player_cards)-len(computer_dealer_cards)," CARDS" , ' '*3 , '|','   ',sep= '',end = '\n')
+    for _ in range(0,3):
+        print('|',' '*14,'|','   ',sep = '',end = '\n')
+    print('+','-'*14,'+','   ',sep='',end = '\n')
