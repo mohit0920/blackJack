@@ -78,7 +78,8 @@ def show_deck():
 def show_board():
 
     '''Takes No input & displays board means computer dealer Cards, deck , player cards'''
-
+    
+    print("\n"*10)
     print("***Computer Dealer***")
     show_card(len(computer_dealer_cards)-1,computer_dealer_cards)
 
@@ -145,7 +146,8 @@ class Card:
     def __eq__(self,other):
         return (self.symbol == other.symbol) and (self.shape == other.shape)
         
-
+class BurstError(Exception):
+    pass
 
 
 ## some declarations of properties of cards
@@ -160,7 +162,7 @@ while True:
     player_cards= [hit(),hit()]
     computer_dealer_cards = [Card((0,0)),hit(),hit()]
 
-    print("\n"*5)
+    print("\n"*50)
 
 
     print("***Hi! Welcome to BLACKJACK!***")
@@ -187,6 +189,8 @@ while True:
                 else:
                     break
     if natural_check(player_cards):
+        computer_dealer_cards.pop(0)
+        show_board()
         print("WOW!  You Got a natural!")
         print("***You WON!***")
 
@@ -194,7 +198,6 @@ while True:
             continue
         else:
             break
-
     if burst_check(computer_dealer_cards):
         print("WOW! Dealer Burst!")
         print("***YOU WON! ***")
@@ -203,58 +206,78 @@ while True:
         else:
             break
 
+
         
+    try:
+        while True:
 
-    while True:
+            hit_or_stand = input("Press Enter to make a hit or type Stand then press Enter to take stand:\n")
 
-        hit_or_stand = input("Press Enter to make a hit or type Stand then press Enter to take stand:\n")
+            if hit_or_stand == '':
+                print("Make a Hit")
+                player_cards.append(hit())
+                show_board()
+                if burst_check(player_cards):
+                    print("Player Burst!")
+                    print("***YOU LOOSE***")
+                    raise BurstError
 
-        if hit_or_stand == '':
-            print("Make a Hit")
-            player_cards.append(hit())
-            show_board()
-        elif hit_or_stand.lower() == 'stand':
-            print("Take A Stand")
-            for card in player_cards:
-                if card.symbol == 'A ':
-                    one_or_eleven = 14
-                    while one_or_eleven !=1 and one_or_eleven != 11:
-                        one_or_eleven = int(input("You want to count Ace as 1 or 11: \n"))
-                        value[1] = one_or_eleven
-            print(f"Total Value of Your Cards is : {net_value(player_cards)}\n")
-            break
+
+            elif hit_or_stand.lower() == 'stand':
+                print("Take A Stand")
+                for card in player_cards:
+                    if card.symbol == 'A ':
+                        one_or_eleven = 14
+                        while one_or_eleven !=1 and one_or_eleven != 11:
+                            one_or_eleven = int(input("You want to count Ace as 1 or 11: \n"))
+                            value[1] = one_or_eleven
+                print(f"Total Value of Your Cards is : {net_value(player_cards)}\n")
+                break
 
 
     ## computer Dealers turn
 
-    while True:
-        if computer_dealer_cards[0] == Card((0,0)):
-            computer_dealer_cards.pop(0)
-            show_board()
+        while True:
+            if computer_dealer_cards[0] == Card((0,0)):
+                computer_dealer_cards.pop(0)
+                computer_dealer_cards.append(Card((0,0)))
+                show_board()
 
-        for card in computer_dealer_cards:
-            if card.symbol == 'A ':
-                while True:
+            for card in computer_dealer_cards:
+                if card.symbol == 'A ':
 
                     if net_value(computer_dealer_cards) - card.value > 5:
                         card.value = 11
-                        break
                     else:
-                        computer_dealer_cards.append(hit())
+                        computer_dealer_cards.insert(-2,hit())
                         show_board()
 
 
-        if net_value(computer_dealer_cards) < 17:
-            computer_dealer_cards.append(hit())
-            show_board()
+            while net_value(computer_dealer_cards) <= 16:
+                computer_dealer_cards.insert(-2,hit())
+                show_board()
+
+            if burst_check(computer_dealer_cards):
+                print("Dealer Burst!")
+                print("***YOU WON !***")
+                raise BurstError
 
 
+
+            else:
+                break
+
+    except BurstError:
+        if replay():
+            continue
         else:
             break
 
-    if abs(21-net_value(player_cards)) == abs(21-net_value(computer_dealer_cards)):
+
+
+    if net_value(player_cards) == net_value(computer_dealer_cards):
         print("*** IT'S A TIE!***")
-    elif abs(21-net_value(player_cards)) < abs(21-net_value(computer_dealer_cards)):
+    elif net_value(player_cards) > net_value(computer_dealer_cards):
         print("*** YOU WON! ***")
     else:
         print("*** YOU LOOSE ***")
