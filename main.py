@@ -150,6 +150,8 @@ class BurstError(Exception):
     pass
 class Wallet:
 
+    '''Class  to keep track player wallet with its methods to win lose or tie sitaution'''
+
     def __init__(self):
         self.money = 5000
 
