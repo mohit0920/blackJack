@@ -148,13 +148,44 @@ class Card:
         
 class BurstError(Exception):
     pass
+class Wallet:
+
+    def __init__(self):
+        self.money = 5000
+
+    def won_natural(self,bet_amount):
+        self.money += 1.5 * bet_amount
+        print(f"Total amount of 1.5 times of of your bet {bet_amount} INR is credited into your account.\n Now Your wallet has {self.money} INR.")
+
+    def won(self,bet_amount):
+        self.money += bet_amount
+        print(f"Exact amount Equal to your bet {bet_amount} INR is credited into your wallet. \n  Now your  wallet has {self.money} INR.")
+    
+    def tie(self,bet_amount):
+
+        print(f"Your bet amount is credited back into your wallet!\n Your wallet has {self.money} INR.")
+
+    def lost(self,bet_amount):
+        self.money -= bet_amount
+        print(f"Dealer Will collect Your bet. \n Now You Have {self.money} INR in your in wallet. ")
+        if self.money == 0:
+            print("OOPS!!  You Have been lost your all Money!")
+            inp = ' '
+            while inp != '':
+                inp = input("Press Enter To exit!")
+
+            exit()
+    def exit_game(self):
+
+        print(f"You are levaing casinos with {self.money} INR in your wallet.")
+
 
 
 ## some declarations of properties of cards
 shape = ('BLACKJACK','♠','♥','♦','♣','♤','♡','♢','♧')
 symbol = ('  ','A ','2 ','3 ','4 ','5 ','6 ','7 ','8 ','9 ','10','J ','Q ','K ')
 value = [0,11,2,3,4,5,6,7,8,9,10,10,10,10]
-
+player_wallet = Wallet()
 
 ## Main driver code starts here
 
@@ -169,6 +200,14 @@ while True:
     inp = ' '
     while inp != '':
         inp = input("Press Enter to  play game:\n")
+    print(f"You Have {player_wallet.money} INR in your wallet.To play You have to make a bet first.")
+    bet_amount = 0
+    invalid_bet_flag = False
+    while bet_amount <= 0 or bet_amount > player_wallet.money :
+        if invalid_bet_flag :
+            print("Invalid Bet!")
+        bet_amount = int(input("Enter Your Bet amount: \n "))
+        invalid_bet_flag = True
 
     show_board()
     if computer_dealer_cards[1].symbol == 'A ' or computer_dealer_cards[1].value == 0:
@@ -176,34 +215,46 @@ while True:
             if natural_check(player_cards):
                 print("Computer Dealer & You Both has natural !..")
                 print("*** IT'S A TIE! ***")
+                player_wallet.tie(bet_amount)
                 if replay():
                     continue
                 else:
+                    player_wallet.exit_game()
                     break
             else:
                 print("Computer Dealer Has a Natural!")
                 print("***You Loose!***")
+                
+                player_wallet.lost(bet_amount)
 
                 if replay():
                     continue
                 else:
+                    player_wallet.exit_game()
                     break
     if natural_check(player_cards):
         computer_dealer_cards.pop(0)
         show_board()
         print("WOW!  You Got a natural!")
         print("***You WON!***")
+        
+        player_wallet.won_natural(bet_amount)
 
         if replay():
             continue
         else:
+            player_wallet.exit_game()
             break
     if burst_check(computer_dealer_cards):
         print("WOW! Dealer Burst!")
         print("***YOU WON! ***")
+
+        player_wallet.won(bet_amount)
+
         if replay():
             continue
         else:
+            player_wallet.exit_game()
             break
 
 
@@ -220,6 +271,9 @@ while True:
                 if burst_check(player_cards):
                     print("Player Burst!")
                     print("***YOU LOOSE***")
+                    
+                    player_wallet.lost(bet_amount)
+
                     raise BurstError
 
 
@@ -260,6 +314,9 @@ while True:
             if burst_check(computer_dealer_cards):
                 print("Dealer Burst!")
                 print("***YOU WON !***")
+
+                player_wallet.won(bet_amount)
+
                 raise BurstError
 
 
@@ -271,18 +328,27 @@ while True:
         if replay():
             continue
         else:
+            player_wallet.exit_game()
             break
 
 
 
     if net_value(player_cards) == net_value(computer_dealer_cards):
         print("*** IT'S A TIE!***")
+        player_wallet.tie(bet_amount)
     elif net_value(player_cards) > net_value(computer_dealer_cards):
-        print("*** YOU WON! ***")
-    else:
-        print("*** YOU LOOSE ***")
 
+        print("*** YOU WON! ***")
+
+        player_wallet.won(bet_amount)
+
+    else:
+
+
+        print("*** YOU LOOSE ***")
+        player_wallet.lost(bet_amount) 
     if replay():
         continue
     else:
+        player_wallet.exit_game()
         break
