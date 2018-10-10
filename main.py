@@ -43,7 +43,7 @@ def hit():
     
     from random import randint
     
-    card = Card((randint(1,13),randint(1,8)))
+    card = Card((randint(1,13),randint(1,4)))
     try:
 
         for cards in player_cards:
@@ -127,11 +127,22 @@ def replay():
 
 def net_value(hand):
 
-    '''Takes list of cards a argument & return the total value of cards'''
+    '''Takes list of cards a argument & return the total value of cards Make Adjustment for ace'''
 
     value = 0
     for card in hand:
         value += card.value
+
+    if Card((1,1) in hand and value > 21:
+            value -= 10
+
+    if Card((1,2) in hand and value > 21:
+            value -= 10
+    if Card((1,3) in hand and value > 21:
+            value -= 10
+    if Card((1,4) in hand and value > 21:
+            value -= 10
+
 
     return value
 
@@ -184,7 +195,7 @@ class Wallet:
 
 
 ## some declarations of properties of cards
-shape = ('BLACKJACK','♠','♥','♦','♣','♤','♡','♢','♧')
+shape = ('BLACKJACK','♠','♥','♦','♣')
 symbol = ('  ','A ','2 ','3 ','4 ','5 ','6 ','7 ','8 ','9 ','10','J ','Q ','K ')
 value = [0,11,2,3,4,5,6,7,8,9,10,10,10,10]
 player_wallet = Wallet()
