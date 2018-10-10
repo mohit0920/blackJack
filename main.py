@@ -133,14 +133,14 @@ def net_value(hand):
     for card in hand:
         value += card.value
 
-    if Card((1,1) in hand and value > 21:
+    if Card((1,1)) in hand and value > 21:
             value -= 10
 
-    if Card((1,2) in hand and value > 21:
+    if Card((1,2)) in hand and value > 21:
             value -= 10
-    if Card((1,3) in hand and value > 21:
+    if Card((1,3)) in hand and value > 21:
             value -= 10
-    if Card((1,4) in hand and value > 21:
+    if Card((1,4)) in hand and value > 21:
             value -= 10
 
 
