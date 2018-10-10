@@ -127,21 +127,11 @@ def replay():
 
 def net_value(hand):
 
-    '''Takes list of cards a argument & return the total value of cards Make Adjustment for ace'''
+    '''Takes list of cards a argument & return the total value of cards'''
 
     value = 0
     for card in hand:
         value += card.value
-
-    if Card((1,1)) in hand and value > 21:
-            value -= 10
-
-    if Card((1,2)) in hand and value > 21:
-            value -= 10
-    if Card((1,3)) in hand and value > 21:
-            value -= 10
-    if Card((1,4)) in hand and value > 21:
-            value -= 10
 
 
     return value
@@ -281,6 +271,13 @@ while True:
                 print("Make a Hit")
                 player_cards.append(hit())
                 show_board()
+                card = player_cards[-1]
+                if card.symbol == 'A ':
+                    one_or_eleven = 14
+                    while one_or_eleven !=1 and one_or_eleven != 11:
+                        one_or_eleven = int(input("You want to count Ace as 1 or 11: \n"))
+                        card.value = one_or_eleven
+
                 if burst_check(player_cards):
                     print("Player Burst!")
                     print("***YOU LOOSE***")
@@ -297,7 +294,7 @@ while True:
                         one_or_eleven = 14
                         while one_or_eleven !=1 and one_or_eleven != 11:
                             one_or_eleven = int(input("You want to count Ace as 1 or 11: \n"))
-                            value[1] = one_or_eleven
+                            card.value = one_or_eleven
                 print(f"Total Value of Your Cards is : {net_value(player_cards)}\n")
                 break
 
