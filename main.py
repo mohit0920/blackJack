@@ -320,7 +320,7 @@ while True:
                         show_board()
 
 
-            while net_value(computer_dealer_cards) <= 16:
+            while net_value(computer_dealer_cards) <= 16 and net_value(computer_dealer_cards) <= net_value(player_cards):
                 computer_dealer_cards.insert(-2,hit())
                 show_board()
 
